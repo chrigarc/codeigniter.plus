@@ -75,9 +75,7 @@ class Test extends CI_Controller {
 
 	public function load()
 	{
-		new Example_Csv_Load(array(
-			'filename' => '/tmp/1.csv',
-			'batch_size' => 1
-		));
+		$method = 'command';
+		$this->{$method}();
 	}
 }

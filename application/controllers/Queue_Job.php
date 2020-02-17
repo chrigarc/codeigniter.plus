@@ -35,6 +35,13 @@ class Queue_Job extends CI_Controller
 			'batch_size' => 1
 		));
 	}
+
+	public function example_notification()
+	{
+		require_once APPPATH.'notifications/Example_Notification.php';
+		$n = new Example_Notification();
+		$n->launch();
+	}
 }
 
 

@@ -100,7 +100,14 @@ class Job
 
 	public function load_job($name)
 	{
-		require APPPATH.'/jobs/'.$name.".php";
+		if(file_exists(APPPATH.'jobs/'.$name.".php")){
+			require APPPATH.'jobs/'.$name.".php";
+		}else if(file_exists(APPPATH.'notifications/'.$name.".php")){
+			require APPPATH.'notifications/'.$name.".php";
+		}else{
+			throw new Exception("Don't exists job");
+		}
+
 		$instance = new $name();
 		return $instance;
 	}
