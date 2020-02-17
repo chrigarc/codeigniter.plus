@@ -111,6 +111,30 @@ abstract class Notification_Job implements Runnable_Job
 //		echo $this->CI->email->print_debugger();
 	}
 
+	final public function run_discord($params = array())
+	{
+		$this->CI->config->load('discord');
+		$webhookurl =  $this->CI->config->item('discord');
+		if($webhookurl && isset($params['message'])  && $params['message']){
+			$msg = $params['message'];
+
+			$json_data = array ('content'=>"$msg");
+			$make_json = json_encode($json_data);
+
+			$ch = curl_init( $webhookurl );
+			curl_setopt( $ch, CURLOPT_HTTPHEADER, array('Content-type: application/json'));
+			curl_setopt( $ch, CURLOPT_POST, 1);
+			curl_setopt( $ch, CURLOPT_POSTFIELDS, $make_json);
+			curl_setopt( $ch, CURLOPT_FOLLOWLOCATION, 1);
+			curl_setopt( $ch, CURLOPT_HEADER, 0);
+			curl_setopt( $ch, CURLOPT_RETURNTRANSFER, 1);
+
+			$response = curl_exec( $ch );
+		}else{
+			throw new Exception("Invalid discord config");
+		}
+	}
+
 	public function _valid_email_params($params)
 	{
 		return isset($params['to']) && isset($params['from']) && isset($params['subject']) && isset($params['message']);

@@ -9,8 +9,8 @@ class Example_Notification extends Notification_Job
 	public function via()
 	{
 		return array(
-//			'dummy',
-//			'mail'
+			'dummy',
+			'mail',
 			'discord'
 		);
 	}
@@ -32,6 +32,13 @@ class Example_Notification extends Notification_Job
 			),
 			'subject' => 'Mensaje de prueba: ' . now(),
 			'message' => "Hola Mundo"
+		);
+	}
+
+	public function get_discord_params()
+	{
+		return array(
+			'message' => 'Hola Extraño' . now()
 		);
 	}
 }
