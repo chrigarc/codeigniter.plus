@@ -2,7 +2,7 @@
 
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-class Example_Job implements Runnable_Job
+class Example_job implements Runnable_job
 {
 	
 	public function run($params = array())

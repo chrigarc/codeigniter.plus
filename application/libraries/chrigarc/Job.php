@@ -1,7 +1,7 @@
 <?php
 
 defined('BASEPATH') OR exit('No direct script access allowed');
-require APPPATH.'libraries/chrigarc/Runnable_Job.php';
+require_once APPPATH.'libraries/chrigarc/Runnable_job.php';
 
 class Job
 {
@@ -133,5 +133,40 @@ class Job
 	private function _get_name_table()
 	{
 		return ($this->_schema ? $this->_schema . '.' : '') . "jobs";
+	}
+
+	public function paginate($page = 1, $per_page = 10, $field = 'id', $sort = 'asc', $filters = array())
+	{
+		$this->_db->flush_cache();
+		$this->_db->start_cache();
+		$this->_db->from($this->_get_name_table());
+		$this->_db->where($filters);
+		$this->_db->order_by($field, $sort);
+		$this->_db->stop_cache();
+		$total = $this->_db->count_all_results();
+		$this->_db->limit($per_page, ($page-1) * $per_page);
+		$query = $this->_db->get();
+
+		$result = array(
+			'data' => $query->result(),
+			'total' => $total,
+			'page' => $page,
+		);
+
+		$this->_db->flush_cache();
+
+		return json_encode($result);
+	}
+
+	public function find_or_fail($id)
+	{
+		$this->_db->flush_cache();
+		$this->_db->from($this->_get_name_table());
+		$this->_db->where('id', $id);
+		$result = $this->_db->get()->result();
+		if(!$result){
+			throw new Exception('Not found');
+		}
+		return json_encode($result);
 	}
 }

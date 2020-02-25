@@ -53,7 +53,15 @@ $route['default_controller'] = 'welcome';
 $route['404_override'] = '';
 $route['translate_uri_dashes'] = FALSE;
 
-$route['test'] = 'test/prueba1';
+//$route['test'] = 'test/prueba1';
 
 $route['api/message/(:any)'] = 'test/message/$1';
 
+$route['log_error'] = 'chrigarc/Backend_error/index';
+$route['log_error/(:num)'] = 'chrigarc/Backend_error/show/$1';
+
+$route['log'] = 'chrigarc/Log/index';
+$route['log/(:num)'] = 'chrigarc/Log/show/$1';
+
+$route['job'] = 'chrigarc/Queue_job/index';
+$route['job/(:num)'] = 'chrigarc/Queue_job/show/$1';

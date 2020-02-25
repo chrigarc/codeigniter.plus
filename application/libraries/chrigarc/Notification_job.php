@@ -1,8 +1,9 @@
 <?php
 
 defined('BASEPATH') OR exit('No direct script access allowed');
+require_once APPPATH.'libraries/chrigarc/Runnable_job.php';
 
-abstract class Notification_Job implements Runnable_Job
+abstract class Notification_job implements Runnable_job
 {
 
 	/**
@@ -30,12 +31,12 @@ abstract class Notification_Job implements Runnable_Job
 		if (!$this->_db instanceof CI_DB_query_builder) {
 			throw new Exception('Query Builder not enabled for the configured database. Aborting.');
 		}
-		$this->CI->load->library('job');
+		$this->CI->load->library('chrigarc/job');
 	}
 
 	public abstract function via();
 
-	public function launch()
+	final public function launch()
 	{
 		if ($this->_valid_via()) {
 			foreach ($this->via() as $via) {
@@ -68,9 +69,7 @@ abstract class Notification_Job implements Runnable_Job
 	final public function run($params = array())
 	{
 		$method = "run_{$params['via']}";
-		$this->_db->flush_cache();
 		$this->$method($params);
-		$this->_db->flush_cache();
 	}
 
 	final public function run_dummy($params = array())

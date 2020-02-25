@@ -1,9 +1,9 @@
 <?php
 
 defined('BASEPATH') OR exit('No direct script access allowed');
-require_once APPPATH.'libraries/chrigarc/Notification_Job.php';
+require_once APPPATH.'libraries/chrigarc/Notification_job.php';
 
-class Example_Notification extends Notification_Job
+class Example_notification extends Notification_job
 {
 
 	public function via()

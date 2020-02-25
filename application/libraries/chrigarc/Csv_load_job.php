@@ -2,7 +2,7 @@
 
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-abstract class Csv_Load_Job  implements Runnable_Job
+abstract class Csv_load_job  implements Runnable_job
 {
 
 	/**
