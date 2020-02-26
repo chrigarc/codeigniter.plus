@@ -111,6 +111,3 @@ create table if not exists user_roles
     foreign key (user_id) references users (id)
 );
 
-describe users;
-
-select sha2('kiqzer', 512);

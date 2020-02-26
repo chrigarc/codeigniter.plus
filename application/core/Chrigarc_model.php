@@ -123,6 +123,37 @@ class Chrigarc_model extends CI_Model
 		return $result;
 	}
 
+	public function find_uuid($uuid)
+	{
+		if(!$this->has_uuid()){
+			throw new Exception("Model don't have uuid");
+		}
+		$this->db->flush_cache();
+		$this->db->from($this->get_table());
+		$this->db->where('uuid', $uuid);
+		$result = $this->db->get()->result();
+		if(count($result) > 0){
+			$result = $result[0];
+		}
+		return $result;
+	}
+
+	public function find_uuid_or_fail($uuid)
+	{
+		if(!$this->has_uuid()){
+			throw new Exception("Model don't have uuid");
+		}
+		$this->db->flush_cache();
+		$this->db->from($this->get_table());
+		$this->db->where('uuid', $uuid);
+		$result = $this->db->get()->result();
+		if(!$result){
+			throw new Exception('Not found');
+		}
+		return $result;
+	}
+
+
 	public function update($key = array(), $data = array())
 	{
 		$this->db->flush_cache();

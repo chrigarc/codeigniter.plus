@@ -39,6 +39,19 @@ class User_model extends Chrigarc_model
 		return $result;
 	}
 
+	public function find_uuid($uuid)
+	{
+		$this->db->flush_cache();
+		$this->db->from($this->get_table());
+		$this->db->select($this->select_fields);
+		$this->db->where('uuid', $uuid);
+		$result = $this->db->get()->result();
+		if(count($result) > 0){
+			$result = $result[0];
+		}
+		return $result;
+	}
+
 	public function find_or_fail($id)
 	{
 		$this->db->flush_cache();
@@ -49,6 +62,20 @@ class User_model extends Chrigarc_model
 		if(!$result){
 			throw new Exception('Not found');
 		}
+		return $result;
+	}
+
+	public function find_uuid_or_fail($uuid)
+	{
+		$this->db->flush_cache();
+		$this->db->from($this->get_table());
+		$this->db->select($this->select_fields);
+		$this->db->where('uuid', $uuid);
+		$result = $this->db->get()->result();
+		if(!$result){
+			throw new Exception('Not found');
+		}
+		$result = $result[0];
 		return $result;
 	}
 
@@ -90,6 +117,31 @@ class User_model extends Chrigarc_model
 		$this->db->flush_cache();
 		return $result;
 
+	}
+
+
+	public function paginate($page = 1, $per_page = 10, $field = 'id', $sort = 'asc', $filters = array())
+	{
+		$this->db->flush_cache();
+		$this->db->start_cache();
+		$this->db->from($this->get_table());
+		$this->db->select($this->select_fields);
+		$this->db->where($filters);
+		$this->db->order_by($field, $sort);
+		$this->db->stop_cache();
+		$total = $this->db->count_all_results();
+		$this->db->limit($per_page, ($page-1) * $per_page);
+		$query = $this->db->get();
+
+		$result = array(
+			'data' => $query->result(),
+			'total' => $total,
+			'page' => $page,
+		);
+
+		$this->db->flush_cache();
+
+		return $result;
 	}
 
 	public function login($email, $password)

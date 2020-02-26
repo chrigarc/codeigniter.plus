@@ -183,7 +183,7 @@ class Test extends CI_Controller
 		$users_load = [];
 
 		foreach ($users as $row){
-			$users_load [] = $this->user_model->first_or_create($row);
+			$users_load [] = $this->user_model->first_or_create($row, true);
 		}
 
 		foreach ($roles as $row) {
@@ -193,16 +193,37 @@ class Test extends CI_Controller
 			$modules_load [] = $this->module->first_or_create($row);
 		}
 
+		$this->user_model->add_role($users_load[2]->id, $roles_load[2]->id);
 		$this->user_model->add_role($users_load[0]->id, $roles_load[0]->id);
 		$this->role->add_module($roles_load[0]->id, $modules_load[0]->id);
+		$this->role->add_module($roles_load[2]->id, $modules_load[2]->id);
 		$this->user_model->add_module($users_load[1]->id, $roles_load[1]->id);
 
 		$has_access = $this->permission->is_allowed($users_load[0]->id, $modules_load[0]->id);
-		echo ($has_access ? 'true' : 'false') . "<br>";
+		echo "{$users_load[0]->email}, {$modules_load[0]->pattern} : ".($has_access ? 'true' : 'false') . "<br>";
 
 		$has_access = $this->permission->is_allowed($users_load[1]->id, $modules_load[1]->id);
-		echo ($has_access ? 'true' : 'false') . "<br>";
+		echo "{$users_load[1]->email}, {$modules_load[1]->pattern} : ".($has_access ? 'true' : 'false') . "<br>";
+
+		$has_access = $this->permission->is_allowed($users_load[2]->id, $modules_load[2]->id);
+		echo "{$users_load[2]->email}, {$modules_load[2]->pattern} : ".($has_access ? 'true' : 'false') . "<br>";
+
+		$has_access = $this->permission->is_allowed($users_load[2]->id, $modules_load[1]->id);
+		echo "{$users_load[2]->email}, {$modules_load[1]->pattern} : ".($has_access ? 'true' : 'false') . "<br>";
+
+		$has_access = $this->permission->is_allowed($users_load[1]->id, $modules_load[2]->id);
+		echo "{$users_load[1]->email}, {$modules_load[2]->pattern} : ".($has_access ? 'true' : 'false') . "<br>";
 
 		$this->output->set_output('Finished');
+	}
+
+	public function login()
+	{
+		$result = array(
+			'name' => $this->security->get_csrf_token_name(),
+			'hash' => $this->security->get_csrf_hash()
+		);
+		$result = json_encode($result);
+		$this->output->set_content_type('application/json')->set_output($result);
 	}
 }

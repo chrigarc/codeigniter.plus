@@ -17,6 +17,7 @@ class Queue_job extends CI_Controller
 		$sort = $this->input->get('sort') ? : 'asc';
 		$field = $this->input->get('field')? : 'id';
 		$result = $this->job->paginate($page, $perPage, $field, $sort);
+		$result = json_encode($result);
 		$this->output->set_content_type('application/json')->set_output($result);
 	}
 

@@ -57,11 +57,21 @@ $route['translate_uri_dashes'] = FALSE;
 
 $route['api/message/(:any)'] = 'test/message/$1';
 
-$route['log_error'] = 'chrigarc/Backend_error/index';
-$route['log_error/(:num)'] = 'chrigarc/Backend_error/show/$1';
+$route['api/login'] = 'test/login';
 
-$route['log'] = 'chrigarc/Log/index';
-$route['log/(:num)'] = 'chrigarc/Log/show/$1';
+$route['api/log_error']['get'] = 'chrigarc/Backend_error/index';
+$route['api/log_error/(:num)']['get'] = 'chrigarc/Backend_error/show/$1';
 
-$route['job'] = 'chrigarc/Queue_job/index';
-$route['job/(:num)'] = 'chrigarc/Queue_job/show/$1';
+$route['api/log']['get'] = 'chrigarc/Log/index';
+$route['api/log/(:num)']['get'] = 'chrigarc/Log/show/$1';
+
+$route['api/job']['get'] = 'chrigarc/Queue_job/index';
+$route['api/job/(:num)']['get'] = 'chrigarc/Queue_job/show/$1';
+
+$route['api/user']['get'] = 'chrigarc/User/index';
+$route['api/user/(:any)']['get'] = 'chrigarc/User/show/$1';
+$route['api/user']['post'] = 'chrigarc/User/store';
+$route['api/user/(:any)']['post'] = 'chrigarc/User/update/$1';
+$route['api/user/(:any)']['delete'] = 'chrigarc/User/destroy/$1';
+
+$route['([a-z]+)/([a-z]+)'] = 'welcome';
