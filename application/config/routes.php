@@ -74,4 +74,16 @@ $route['api/user']['post'] = 'chrigarc/User/store';
 $route['api/user/(:any)']['post'] = 'chrigarc/User/update/$1';
 $route['api/user/(:any)']['delete'] = 'chrigarc/User/destroy/$1';
 
+$route['api/role']['get'] = 'chrigarc/Role/index';
+$route['api/role/(:any)']['get'] = 'chrigarc/Role/show/$1';
+$route['api/role']['post'] = 'chrigarc/Role/store';
+$route['api/role/(:any)']['post'] = 'chrigarc/Role/update/$1';
+$route['api/role/(:any)']['delete'] = 'chrigarc/Role/destroy/$1';
+
+$route['api/module']['get'] = 'chrigarc/Module/index';
+$route['api/module/(:any)']['get'] = 'chrigarc/Module/show/$1';
+$route['api/module']['post'] = 'chrigarc/Module/store';
+$route['api/module/(:any)']['post'] = 'chrigarc/Module/update/$1';
+$route['api/module/(:any)']['delete'] = 'chrigarc/Module/destroy/$1';
+
 $route['([a-z]+)/([a-z]+)'] = 'welcome';
