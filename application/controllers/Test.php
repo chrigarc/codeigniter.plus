@@ -226,4 +226,27 @@ class Test extends CI_Controller
 		$result = json_encode($result);
 		$this->output->set_content_type('application/json')->set_output($result);
 	}
+
+	public function loader_composer()
+	{
+		$this->load->add_package_path(APPPATH.'third_party/Snappy');
+		$this->load->library('Snappy', null, 'pdf');
+		header('Content-Type: application/pdf');
+		header('Content-Disposition: attachment; filename="file.pdf"');
+		echo $this->pdf->getOutputFromHtml('<p>Some content</p>');
+	}
+
+	public function pdf()
+	{
+		header('Content-Type: application/pdf');
+		header('Content-Disposition: attachment; filename="file.pdf"');
+
+		$this->load->add_package_path(APPPATH.'third_party/Snappy');
+		$this->load->library('Snappy', null, 'pdf');
+		$content = '';
+		for($i=0;$i<1000;$i++){
+			$content.='<p>Some content</p>';
+		}
+		echo $this->pdf->getOutputFromHtml($content);
+	}
 }

@@ -86,4 +86,5 @@ $route['api/module']['post'] = 'chrigarc/Module/store';
 $route['api/module/(:any)']['post'] = 'chrigarc/Module/update/$1';
 $route['api/module/(:any)']['delete'] = 'chrigarc/Module/destroy/$1';
 
-$route['([a-z]+)/([a-z]+)'] = 'welcome';
+//$route['([a-z]+)/([a-z]+)'] = 'welcome';
+
