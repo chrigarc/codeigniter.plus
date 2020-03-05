@@ -1,5 +1,6 @@
 <?php
 
+defined('BASEPATH') OR exit('No direct script access allowed');
 
 class Chrigarc_model extends CI_Model
 {
@@ -108,7 +109,7 @@ class Chrigarc_model extends CI_Model
 		if(!$result){
 			throw new Exception('Not found');
 		}
-		return $result;
+		return $result[0];
 	}
 
 	public function find($id)
@@ -150,9 +151,8 @@ class Chrigarc_model extends CI_Model
 		if(!$result){
 			throw new Exception('Not found');
 		}
-		return $result;
+		return $result[0];
 	}
-
 
 	public function update($key = array(), $data = array())
 	{

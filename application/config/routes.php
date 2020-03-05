@@ -57,7 +57,9 @@ $route['translate_uri_dashes'] = FALSE;
 
 $route['api/message/(:any)'] = 'test/message/$1';
 
-$route['api/login'] = 'test/login';
+$route['api/csrf']['get'] = 'chrigarc/Auth/csrf';
+
+$route['api/login']['post'] = 'chrigarc/Auth/login';
 
 $route['api/log_error']['get'] = 'chrigarc/Backend_error/index';
 $route['api/log_error/(:num)']['get'] = 'chrigarc/Backend_error/show/$1';
@@ -86,5 +88,5 @@ $route['api/module']['post'] = 'chrigarc/Module/store';
 $route['api/module/(:any)']['post'] = 'chrigarc/Module/update/$1';
 $route['api/module/(:any)']['delete'] = 'chrigarc/Module/destroy/$1';
 
-//$route['([a-z]+)/([a-z]+)'] = 'welcome';
+$route['([a-z]+)/([a-z]+)'] = 'welcome';
 

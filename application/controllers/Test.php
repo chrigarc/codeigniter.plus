@@ -249,4 +249,16 @@ class Test extends CI_Controller
 		}
 		echo $this->pdf->getOutputFromHtml($content);
 	}
+
+	public function jwt()
+	{
+		$this->load->library('chrigarc/Jwt', null, 'jwt');
+		$jwt = $this->jwt->encode(['hi' => 'ass', 'timestamp' => now()], 'hola');
+		echo $jwt."\n";
+		$d = $this->jwt->decode($jwt, 'hola');
+		print_r($d);
+		echo "\n";
+		echo $d->timestamp."\n";
+		echo session_id()."\n";
+	}
 }

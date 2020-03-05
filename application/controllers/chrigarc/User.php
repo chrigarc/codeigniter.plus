@@ -23,9 +23,17 @@ class User extends CI_Controller
 
 	public function show($uuid)
 	{
-		$user = $this->user->find_uuid_or_fail($uuid);
-		$result = json_encode($user);
-		$this->output->set_content_type('application/json')->set_output($result);
+		try{
+			$user = $this->user->find_uuid_or_fail($uuid);
+			$result = json_encode($user);
+			$this->output->set_content_type('application/json')->set_output($result);
+		}catch (Exception $ex){
+			$this->output->set_content_type('application/json')
+				->set_status_header(404)
+				->set_output(json_encode(array(
+					'message' => $ex->getMessage()
+				)));
+		}
 	}
 
 	public function store()
@@ -70,4 +78,72 @@ class User extends CI_Controller
 		$result = json_encode(array('status' => true, 'message' => 'OK'));
 		$this->output->set_content_type('application/json')->set_output($result);
 	}
+
+	public function load_back_office()
+	{
+		$this->load->library('chrigarc/Permission');
+		$this->load->model('chrigarc/Module_model', 'module', true);
+		$this->load->model('chrigarc/Role_model', 'role', true);
+		$this->load->model('chrigarc/User_model', 'user_model', true);
+
+		$users = [
+			[
+				'name' => 'Christian',
+				'last_name' => 'Garcia',
+				'email' => 'chrigarc@ciencias.unam.mx',
+				'password' => 'Banana$123$.'
+			],
+		];
+
+		$roles = [
+			['name' => 'root'],
+		];
+
+		$modules = [
+			[
+				'name' => 'CSRF',
+				'pattern' => 'api/csrf',
+				'method' => 'GET',
+				'auth' => false
+			],
+			[
+				'name' => 'Login',
+				'pattern' => 'api/login',
+				'method' => 'POST',
+				'auth' => false
+			],
+			[
+				'name' => 'Logout',
+				'pattern' => 'api/logout',
+				'method' => 'POST',
+				'auth' => true
+			],
+			[
+				'name' => 'User Index',
+				'pattern' => 'api/user',
+				'method' => 'GET',
+				'auth' => true
+			],
+		];
+
+		$roles_load = [];
+		$modules_load = [];
+		$users_load = [];
+
+		foreach ($users as $row){
+			$users_load [] = $this->user_model->first_or_create($row, true);
+		}
+
+		foreach ($roles as $row) {
+			$roles_load [] = $this->role->first_or_create($row);
+		}
+		foreach ($modules as $row) {
+			$modules_load [] = $this->module->first_or_create($row);
+		}
+
+		$this->user_model->add_role($users_load[0]->id, $roles_load[0]->id);
+
+		$this->output->set_output('Finished');
+	}
+
 }

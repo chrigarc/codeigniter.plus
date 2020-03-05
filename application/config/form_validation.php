@@ -45,4 +45,16 @@ $config = array(
 			'rules' => 'required'
 		),
 	),
+	'auth.login' => array(
+		array(
+			'field' => 'email',
+			'label' => 'Email',
+			'rules' => 'required'
+		),
+		array(
+			'field' => 'password',
+			'label' => 'Password',
+			'rules' => 'required'
+		),
+	),
 );

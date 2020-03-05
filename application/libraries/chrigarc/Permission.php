@@ -46,22 +46,47 @@ class Permission
 		log_message('info', 'Permission Class Initialized');
 	}
 
-	public function is_allowed($user_id, $module_id)
+	public function is_allowed($module_pattern, $method = 'GET', $user_id = null)
 	{
-		$result = false;
-		if ($this->_is_root($user_id)) {
+		if ($user_id && $this->_is_root($user_id)) {
 			$result = true;
 		} else {
-			$result = $this->_role_has_access_module($user_id, $module_id) || $this->_user_has_access_module($user_id, $module_id);
+			$this->CI->load->model('chrigarc/Module_model', 'module', true);
+			$module = null;
+			$results = $this->CI->module->get(array(
+					'pattern' => $module_pattern,
+					'method' => $method
+				)
+			);
+
+			if ($results) {
+				$module = $results[0];
+			} else {
+				throw new Exception("Not found");
+			}
+
+			$result = !$this->_require_auth($module->id) ||
+				$this->_role_has_access_module($user_id, $module->id) ||
+				$this->_user_has_access_module($user_id, $module->id);
 		}
 		return $result;
+	}
+
+	private function _require_auth($module_id)
+	{
+		$this->_db->flush_cache();
+		$this->_db->from($this->_get_table('modules'));
+		$this->_db->where('active', true);
+		$this->_db->where('id', $module_id);
+		$query = $this->_db->get();
+		$result = $query->result();
+		return $result[0]->auth;
 	}
 
 	private function _is_root($user_id)
 	{
 		$result = false;
 		$this->_db->flush_cache();
-		$this->_db->select('1');
 		$this->_db->from($this->_get_table('users').' users');
 		$this->_db->join($this->_get_table('user_roles').' ur', 'users.id = ur.user_id');
 		$this->_db->join($this->_get_table('roles').' roles', 'roles.id = ur.role_id');

@@ -155,7 +155,7 @@ class User_model extends Chrigarc_model
 		$user = $this->get(array(
 			'email' => $email,
 			'active' => true
-		));
+		))[0];
 		if($this->CI->session) {
 			$this->CI->session->set_userdata('application', ['user' => $user]);
 		}
