@@ -13,9 +13,9 @@ class User extends CI_Controller
 	public function index()
 	{
 		$page = $this->input->get('page') ?: '1';
-		$perPage = $this->input->get('perPage') ? : '10';
-		$sort = $this->input->get('sort') ? : 'asc';
-		$field = $this->input->get('field')? : 'id';
+		$perPage = $this->input->get('perPage') ?: '10';
+		$sort = $this->input->get('sort') ?: 'asc';
+		$field = $this->input->get('field') ?: 'id';
 		$result = $this->user->paginate($page, $perPage, $field, $sort);
 		$result = json_encode($result);
 		$this->output->set_content_type('application/json')->set_output($result);
@@ -23,11 +23,11 @@ class User extends CI_Controller
 
 	public function show($uuid)
 	{
-		try{
+		try {
 			$user = $this->user->find_uuid_or_fail($uuid);
 			$result = json_encode($user);
 			$this->output->set_content_type('application/json')->set_output($result);
-		}catch (Exception $ex){
+		} catch (Exception $ex) {
 			$this->output->set_content_type('application/json')
 				->set_status_header(404)
 				->set_output(json_encode(array(
@@ -39,13 +39,12 @@ class User extends CI_Controller
 	public function store()
 	{
 		$this->load->library('form_validation');
-		if ($this->form_validation->run('user.store') == FALSE)
-		{
+		if ($this->form_validation->run('user.store') == FALSE) {
 			$this->output->set_content_type('application/json')->set_status_header(403)->set_output(json_encode(array(
 				'status' => false,
 				'errors' => $this->form_validation->error_array()
 			)));
-		}else{
+		} else {
 			$data = $this->input->post(array('email', 'name', 'password', 'last_name', 'other_name'), TRUE);
 			$user = $this->user->first_or_create($data, true);
 			$result = json_encode($user);
@@ -57,13 +56,12 @@ class User extends CI_Controller
 	{
 		$this->load->library('form_validation');
 		$user = $this->user->find_uuid_or_fail($uuid);
-		if ($this->form_validation->run('user.update') == FALSE)
-		{
+		if ($this->form_validation->run('user.update') == FALSE) {
 			$this->output->set_content_type('application/json')->set_status_header(403)->set_output(json_encode(array(
 				'status' => false,
 				'errors' => $this->form_validation->error_array()
 			)));
-		}else{
+		} else {
 			$data = $this->input->post(array('email', 'name', 'password', 'last_name', 'other_name'), TRUE);
 			$this->user->update($user->id, $data);
 			$result = json_encode(array('status' => true, 'message' => 'OK'));
@@ -130,7 +128,7 @@ class User extends CI_Controller
 		$modules_load = [];
 		$users_load = [];
 
-		foreach ($users as $row){
+		foreach ($users as $row) {
 			$users_load [] = $this->user_model->first_or_create($row, true);
 		}
 

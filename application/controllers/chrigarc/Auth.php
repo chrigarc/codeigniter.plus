@@ -20,8 +20,7 @@ class Auth extends CI_Controller
 		$this->load->library('chrigarc/Jwt', null, 'jwt');
 		$this->load->model('chrigarc/User_model', 'user_model', true);
 		$this->load->library('form_validation');
-		if ($this->form_validation->run('auth.login') == FALSE)
-		{
+		if ($this->form_validation->run('auth.login') == FALSE) {
 			$this->output->set_content_type('application/json')->set_status_header(403)->set_output(json_encode(array(
 				'status' => false,
 				'errors' => $this->form_validation->error_array()
